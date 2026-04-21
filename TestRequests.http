@@ -1,0 +1,28 @@
+﻿POST http://localhost:80/api/item
+Content-Type: application/json
+
+{}
+
+###
+### GET request to example server
+GET localhost:5000/api/GetAllTasks
+###
+
+### POST a new task to the API (Correct version)
+POST http://localhost:5000/api/PostTask
+Content-Type: application/json
+
+{
+  "name": "Test Task"
+}
+###
+
+### POST a FUCKED UP task that FAILS
+POST http://localhost:5000/api/PostTask
+Content-Type: application/json
+
+{
+  "name": "Fucked up Task",
+  "johnvalue": "three point 2.5"
+}
+###
