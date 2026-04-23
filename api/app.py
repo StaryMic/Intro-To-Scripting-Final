@@ -1,14 +1,17 @@
 ﻿from flask import Flask, request, Response
 import logging
+
+from flask_cors import CORS
 from psycopg import connect
 
 from Classes.DatabaseManager import DatabaseManager
 from Classes.PostNewTask import PostNewTask
 from Functions import Validations
 
-con_string : str = "dbname=maindb user=postgres password=password host=172.18.0.2 port=5432"
+con_string : str = "dbname=maindb user=postgres password=password host=db port=5432"
 db_manager : DatabaseManager = DatabaseManager(con_string)
 app = Flask(__name__)
+cors = CORS(app)
 logging.basicConfig(level=logging.DEBUG)
 
 # API ENDPOINTS
@@ -34,11 +37,8 @@ def post_task():
     new_task_req = PostNewTask(req_object)
 
     # Send it to the DB.
-    db_manager.execute(
-        """
-        
-        """
-    )
+    db_manager.execute(new_task_req.get_sql())
+    return "lol"
 
 
 
