@@ -1,22 +1,27 @@
-﻿from datetime import date
+﻿import logging
+from datetime import date
 from typing import Any, Sequence
 
 from psycopg import sql
 from psycopg.sql import SQL, Composed
 
+from api.Functions import StringExtensions
+
 
 class PostNewTask:
     name: str
-    description: str | None
-    due_date: date | None
 
     def __init__(self, task):
-        self.name = task["name"]
-        self.description = (None, task["description"])[task["description"] is not None]
-        self.due_date = (None, date.fromisoformat(task["due_date"]))[task["due_date"] is not None]
 
-    # TODO: Test this.
-    def get_sql(self) -> Composed:
-        return sql.SQL("INSERT INTO tasks (name, description, due_date) VALUES ({values})").format(
-            values=','.join([self.name, str(self.description), str(self.due_date)])
-        )
+        logging.debug(task)
+
+        # Check for keys in the JSON input and add them to the object.
+        if "name" in task:
+            self.name = task["name"]
+
+    def get_sql(self) -> sql.SQL:
+
+        # Create the SQL Query
+        query = sql.SQL("INSERT INTO tasks(name) VALUES (%s)")
+
+        return query

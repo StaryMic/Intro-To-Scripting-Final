@@ -20,6 +20,22 @@ class DatabaseManager:
 
     def execute(self, query) -> list:
         with self.connection.cursor() as cur:
-            cur.execute(query)
-            self.connection.commit()
-            return cur.fetchall()
+            try:
+                cur.execute(query)
+                self.connection.commit()
+                return cur.fetchall()
+            except Exception as e:
+                print(e)
+                self.connection.rollback()
+                return []
+
+    def execute_with_params(self, query, params) -> list:
+        with self.connection.cursor() as cur:
+            try:
+                cur.execute(query, params)
+                self.connection.commit()
+                return cur.fetchall()
+            except Exception as e:
+                print(e)
+                self.connection.rollback()
+                return []

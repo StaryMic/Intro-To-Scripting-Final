@@ -1,6 +1,6 @@
 ﻿
 min_needed_task_keys = ["name"]
-allowed_task_keys = ["name", "description", "due_date", "completed"]
+allowed_task_keys = ["name", "completed"]
 
 def is_valid_task_object(task_object : dict) -> bool:
     global min_needed_task_keys
@@ -18,5 +18,6 @@ def is_valid_task_object(task_object : dict) -> bool:
     for key in task_keys:
         if key not in allowed_task_keys:
             return False
+
     # Passed all checks.
     return True
