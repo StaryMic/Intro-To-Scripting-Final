@@ -1,4 +1,9 @@
-﻿from flask import Flask, request, Response
+﻿import datetime
+import json
+from datetime import date
+from typing import Any
+
+from flask import Flask, request, Response
 import logging
 
 from flask_cors import CORS
@@ -6,6 +11,7 @@ from flask_cors import CORS
 from Classes.DatabaseManager import DatabaseManager
 from Classes.PostNewTask import PostNewTask
 from Functions import Validations
+from api.Classes.TaskClass import Task
 
 host: str = 'localhost'
 con_string: str = f"dbname=maindb user=postgres password=password host={host} port=5432"
@@ -18,11 +24,43 @@ logging.basicConfig(level=logging.DEBUG) # LOG EVERYTHING
 # API ENDPOINTS
 @app.get('/api/GetAllTasks')
 def get_all_tasks():
-    return db_manager.execute(
+    # Get the data from the DB
+    # Data comes back as an array of array of the data.
+    # I don't like that it comes back like this :(
+    keys = ["id", "name", "date_created", "is_completed"]
+
+    data = db_manager.execute(
         """
         SELECT *
         FROM tasks;
         """
+    )
+
+    print(data)
+
+    # Loop through the data and change all Date objects into iso strings
+    formatted_data = []
+    for row in data:
+        formatted_data.append(
+            (row[0], row[1], row[2].isoformat(), row[3])
+        )
+
+    # Turn the data into a dictionary
+    json_data = []
+    for row in formatted_data:
+        json_data.append(dict(zip(keys, row)))
+
+    # Turn it into JSON
+    json_dump = json.dumps(json_data)
+
+    print(json_dump)
+
+    # Return the JSON.
+    return Response(
+        response=json_dump,
+        status=200,
+        mimetype="application/json",
+        content_type="application/json"
     )
 
 
@@ -62,7 +100,7 @@ def delete_task(task_id):
     )
 
 @app.post('/api/MarkTaskAsCompleted/<task_id>')
-def post_new_task(task_id):
+def mark_task_as_completed(task_id):
     result = db_manager.execute_with_params("""
     UPDATE tasks
     SET completed = TRUE

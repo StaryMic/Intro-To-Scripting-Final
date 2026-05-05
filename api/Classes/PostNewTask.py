@@ -19,6 +19,7 @@ class PostNewTask:
         if "name" in task:
             self.name = task["name"]
 
+
     def get_sql(self) -> sql.SQL:
 
         # Create the SQL Query

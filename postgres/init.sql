@@ -4,7 +4,7 @@
 
     name         varchar(64) NOT NULL,
 
-    date_created DATE    DEFAULT current_date,
+    date_created TIMESTAMP    DEFAULT current_timestamp,
 
     completed    BOOLEAN DEFAULT false
 );
