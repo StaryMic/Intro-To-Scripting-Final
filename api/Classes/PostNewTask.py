@@ -1,11 +1,6 @@
 ﻿import logging
-from datetime import date
-from typing import Any, Sequence
 
 from psycopg import sql
-from psycopg.sql import SQL, Composed
-
-from api.Functions import StringExtensions
 
 
 class PostNewTask:

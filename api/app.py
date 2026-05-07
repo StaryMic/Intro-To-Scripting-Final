@@ -1,19 +1,14 @@
-﻿import datetime
-import json
-from datetime import date
-from typing import Any
-
-from flask import Flask, request, Response
+﻿import json
 import logging
 
+from flask import Flask, request, Response
 from flask_cors import CORS
 
 from Classes.DatabaseManager import DatabaseManager
 from Classes.PostNewTask import PostNewTask
 from Functions import Validations
-from api.Classes.TaskClass import Task
 
-host: str = 'localhost'
+host: str = 'db'
 con_string: str = f"dbname=maindb user=postgres password=password host={host} port=5432"
 db_manager: DatabaseManager = DatabaseManager(con_string)
 app = Flask(__name__)
